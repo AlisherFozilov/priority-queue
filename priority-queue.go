@@ -6,54 +6,54 @@ import (
 )
 
 type PriorityQueue struct {
-	list List
+	lst list
 }
 
 func (queue *PriorityQueue) Len() int {
-	return queue.list.Len()
-}
-
-func (queue *PriorityQueue) First() *Node {
-	return queue.list.FirstPtr()
-}
-
-func (queue *PriorityQueue) Last() *Node {
-	return queue.list.LastPtr()
+	return queue.lst.Len()
 }
 
 func (queue *PriorityQueue) Enqueue(element interface{}, priority int) {
-	queue.list.Add(element, priority)
+	queue.lst.add(element, priority)
 }
 
 func (queue *PriorityQueue) Dequeue() (interface{}, error) {
-	sort.Stable(&queue.list)
-	value, err := queue.list.LastValue()
+	sort.Stable(&queue.lst)
+	value, err := queue.lst.lastValue()
 	if err != nil {
 		return nil, err
 	}
-	queue.list.DeleteLast()
+	queue.lst.deleteLast()
 	return value, nil
 }
 
-// ---------------List------------------
+func (queue *PriorityQueue) First() *node {
+	return queue.lst.getFirstPtr()
+}
 
-type Node struct {
-	prev     *Node
-	next     *Node
+func (queue *PriorityQueue) Last() *node {
+	return queue.lst.getLastPtr()
+}
+
+// ---------------list------------------
+
+type node struct {
+	prev     *node
+	next     *node
 	value    interface{}
 	priority int
 	index    int
 }
 
-type List struct {
-	firstPtr *Node
+type list struct {
+	firstPtr *node
 	length   int
 }
 
-func (list *List) Add(value interface{}, priority int) {
+func (list *list) add(value interface{}, priority int) {
 	defer func(){list.length++}()
 	if list.firstPtr == nil {
-		list.firstPtr = &Node{
+		list.firstPtr = &node{
 			value:    value,
 			priority: priority,
 			index:    list.length,
@@ -63,7 +63,7 @@ func (list *List) Add(value interface{}, priority int) {
 		return
 	}
 	secondPtr := list.firstPtr
-	list.firstPtr = &Node{
+	list.firstPtr = &node{
 		value:    value,
 		priority: priority,
 		index:    list.length,
@@ -76,14 +76,14 @@ func (list *List) Add(value interface{}, priority int) {
 	lastPtr.next = list.firstPtr
 }
 
-func (list *List) LastValue() (interface{}, error) {
+func (list *list) lastValue() (interface{}, error) {
 	if list.firstPtr == nil {
-		return nil, fmt.Errorf("no elements in list")
+		return nil, fmt.Errorf("no elements in lst")
 	}
 	return list.firstPtr.prev.value, nil
 }
 
-func (list *List) DeleteLast() {
+func (list *list) deleteLast() {
 	if list.firstPtr == nil {
 		return
 	}
@@ -98,31 +98,33 @@ func (list *List) DeleteLast() {
 	list.firstPtr.prev = beforeLastPtr
 }
 
-func (list *List) FirstPtr() *Node {
+func (list *list) getFirstPtr() *node {
 	return list.firstPtr
 }
 
-func (list *List) LastPtr() *Node {
+func (list *list) getLastPtr() *node {
+	if list.firstPtr == nil {
+		return nil
+	}
 	return list.firstPtr.prev
 }
 
-func (list *List) Len() int {
+func (list *list) Len() int {
 	return list.length
 }
 
-func (list *List) Less(i, j int) bool {
+func (list *list) Less(i, j int) bool {
 	iElemPtr := helpSearchElemByIndex(list, i)
 	jElemPtr := helpSearchElemByIndex(list, j)
 	return iElemPtr.priority > jElemPtr.priority
 }
 
-func (list *List) Swap(i, j int) {
+func (list *list) Swap(i, j int) {
 	iElemPtr := helpSearchElemByIndex(list, i)
 	jElemPtr := helpSearchElemByIndex(list, j)
 	iElemPtr.value, jElemPtr.value = jElemPtr.value, iElemPtr.value
 }
-
-func helpSearchElemByIndex(list *List, i int) *Node {
+func helpSearchElemByIndex(list *list, i int) *node {
 	if i >= list.length || i < 0 {
 		panic("index is wrong")
 	}
