@@ -2,6 +2,7 @@ package priority_queue
 
 import (
 	"fmt"
+	"log"
 	"sort"
 )
 
@@ -23,7 +24,7 @@ func (queue *PriorityQueue) Dequeue() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	queue.lst.deleteLast()
+	(*queue).lst.deleteLast()
 	return value, nil
 }
 
@@ -51,7 +52,7 @@ type list struct {
 }
 
 func (list *list) add(value interface{}, priority int) {
-	defer func(){list.length++}()
+	defer func() { list.length++ }()
 	if list.firstPtr == nil {
 		list.firstPtr = &node{
 			value:    value,
@@ -96,6 +97,7 @@ func (list *list) deleteLast() {
 	beforeLastPtr := lastPtr.prev
 	beforeLastPtr.next = list.firstPtr
 	list.firstPtr.prev = beforeLastPtr
+	list.refreshIndexes()
 }
 
 func (list *list) getFirstPtr() *node {
@@ -124,13 +126,28 @@ func (list *list) Swap(i, j int) {
 	jElemPtr := helpSearchElemByIndex(list, j)
 	iElemPtr.value, jElemPtr.value = jElemPtr.value, iElemPtr.value
 }
+
 func helpSearchElemByIndex(list *list, i int) *node {
 	if i >= list.length || i < 0 {
 		panic("index is wrong")
 	}
 	iSearchPtr := list.firstPtr
+
+	counter := 1
 	for iSearchPtr.index != i {
 		iSearchPtr = iSearchPtr.next
+		if counter > list.length {
+			log.Fatal("...")
+		}
+		counter++
 	}
 	return iSearchPtr
+}
+
+func (list *list) refreshIndexes() {
+	currentPtr := list.firstPtr
+	for i := 0; i < list.length-1; i++ {
+		currentPtr.index--
+		currentPtr = currentPtr.next
+	}
 }

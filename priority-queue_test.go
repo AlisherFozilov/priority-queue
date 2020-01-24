@@ -167,3 +167,39 @@ func TestPriorityQueue_ManyElements_Priority(t *testing.T) {
 		t.Errorf("length must be 0, got: %v", length)
 	}
 }
+
+func TestPriorityQueue_IndexesChecking(t *testing.T) {
+	q := PriorityQueue{}
+	q.Enqueue("Alisher", 10)
+	q.Enqueue("Boba", 9)
+	q.Enqueue("Cily", 8)
+
+	dequeueTest(&q, "Alisher", t)
+
+	q.Enqueue("Dadpul", 7)
+
+	dequeueTest(&q, "Boba", t)
+	dequeueTest(&q, "Cily", t)
+	dequeueTest(&q, "Dadpul", t)
+
+	if q.Len() != 0 {
+		t.Errorf("q.Len() must be 0, got: %v", q.Len())
+	}
+}
+func TestPriorityQueue_StabilityChecking(t *testing.T) {
+	q := PriorityQueue{}
+	q.Enqueue("1", 1)
+	q.Enqueue("2", 1)
+	q.Enqueue("3", 1)
+
+	dequeueTest(&q, "1", t)
+	dequeueTest(&q, "2", t)
+	dequeueTest(&q, "3", t)
+}
+func dequeueTest(q *PriorityQueue, want string, t *testing.T) {
+	valueFace, _ := q.Dequeue()
+	got := valueFace.(string)
+	if got != want {
+		t.Errorf("value must be \"%v\", got: %v", want, got)
+	}
+}
