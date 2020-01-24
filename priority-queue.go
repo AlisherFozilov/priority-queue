@@ -24,16 +24,24 @@ func (queue *PriorityQueue) Dequeue() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	(*queue).lst.deleteLast()
+	queue.lst.deleteLast()
 	return value, nil
 }
 
-func (queue *PriorityQueue) First() *node {
-	return queue.lst.getFirstPtr()
+func (queue *PriorityQueue) First() interface{} {
+	firstPtr := queue.lst.getFirstPtr()
+	if firstPtr != nil {
+		return firstPtr.value
+	}
+	return nil
 }
 
-func (queue *PriorityQueue) Last() *node {
-	return queue.lst.getLastPtr()
+func (queue *PriorityQueue) Last() interface{} {
+	lastPtr := queue.lst.getLastPtr()
+	if lastPtr != nil {
+		return lastPtr.value
+	}
+	return nil
 }
 
 // ---------------list------------------

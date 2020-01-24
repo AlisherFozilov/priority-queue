@@ -7,9 +7,9 @@ import (
 func TestPriorityQueue_Empty(t *testing.T) {
 	priorityQueue := PriorityQueue{}
 
-	firstPtr := priorityQueue.First()
-	if firstPtr != nil {
-		t.Errorf("First() must be nil, got %v", firstPtr)
+	firstFace := priorityQueue.First()
+	if firstFace != nil {
+		t.Errorf("First() must be nil, got %v", firstFace)
 	}
 
 	lastPtr := priorityQueue.Last()
@@ -37,13 +37,13 @@ func TestPriorityQueue_OneElement(t *testing.T) {
 		t.Errorf("length must be 1, got: %v", length)
 	}
 
-	firstPtr := priorityQueue.First()
-	if firstPtr != priorityQueue.lst.firstPtr {
+	firstFace := priorityQueue.First()
+	if firstFace != priorityQueue.lst.firstPtr.value {
 		t.Errorf("First() must be equal to the added element")
 	}
 
-	lastPtr := priorityQueue.Last()
-	if lastPtr != priorityQueue.lst.firstPtr.prev {
+	lastFace := priorityQueue.Last()
+	if lastFace != priorityQueue.lst.firstPtr.prev.value {
 		t.Errorf("Last() must be equal to the added element")
 	}
 
@@ -76,13 +76,13 @@ func TestPriorityQueue_ManyElements_NoPriority(t *testing.T) {
 		t.Errorf("length must be 2, got: %v", length)
 	}
 
-	firstPtr := priorityQueue.First()
-	if firstPtr != priorityQueue.lst.firstPtr {
+	firstFace := priorityQueue.First()
+	if firstFace != priorityQueue.lst.firstPtr.value {
 		t.Errorf("First() must be equal to the added element")
 	}
 
-	lastPtr := priorityQueue.Last()
-	if lastPtr != priorityQueue.lst.firstPtr.prev {
+	lastFace := priorityQueue.Last()
+	if lastFace != priorityQueue.lst.firstPtr.prev.value {
 		t.Errorf("Last() must be equal to the added element")
 	}
 
@@ -127,13 +127,13 @@ func TestPriorityQueue_ManyElements_Priority(t *testing.T) {
 		t.Errorf("length must be 2, got: %v", length)
 	}
 
-	firstPtr := priorityQueue.First()
-	if firstPtr != priorityQueue.lst.firstPtr {
+	firstFace := priorityQueue.First()
+	if firstFace != priorityQueue.lst.firstPtr.value {
 		t.Errorf("First() must be equal to the added element")
 	}
 
-	lastPtr := priorityQueue.Last()
-	if lastPtr != priorityQueue.lst.firstPtr.prev {
+	lastFace := priorityQueue.Last()
+	if lastFace != priorityQueue.lst.firstPtr.prev.value {
 		t.Errorf("Last() must be equal to the added element")
 	}
 
