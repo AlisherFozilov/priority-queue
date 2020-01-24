@@ -116,18 +116,18 @@ func (list *list) Len() int {
 }
 
 func (list *list) Less(i, j int) bool {
-	iElemPtr := helpSearchElemByIndex(list, i)
-	jElemPtr := helpSearchElemByIndex(list, j)
+	iElemPtr := list.helpSearchElemByIndex(i)
+	jElemPtr := list.helpSearchElemByIndex(j)
 	return iElemPtr.priority > jElemPtr.priority
 }
 
 func (list *list) Swap(i, j int) {
-	iElemPtr := helpSearchElemByIndex(list, i)
-	jElemPtr := helpSearchElemByIndex(list, j)
+	iElemPtr := list.helpSearchElemByIndex(i)
+	jElemPtr := list.helpSearchElemByIndex(j)
 	iElemPtr.value, jElemPtr.value = jElemPtr.value, iElemPtr.value
 }
 
-func helpSearchElemByIndex(list *list, i int) *node {
+func (list *list) helpSearchElemByIndex(i int) *node {
 	if i >= list.length || i < 0 {
 		panic("index is wrong")
 	}
